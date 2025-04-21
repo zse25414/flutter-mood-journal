@@ -10,7 +10,7 @@
 
 | 新增日記 | 心情選擇 | 心情統計 || AI 鼓勵語 |
 |---------|---------|---------| 
-| ![](screenshots/new.png) | ![](screenshots/mood.png) | ![](screenshots/chart.png) || ![](screenshots/ai.png) |
+| ![](screenshots/new.png) | ![](screenshots/mood.png) | ![](screenshots/chart.png) | ![](screenshots/ai.png) |
 
 ---
 
