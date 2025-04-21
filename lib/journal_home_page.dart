@@ -119,7 +119,7 @@ class JournalHomePage extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(255, 120, 120, 124),
+        backgroundColor: const Color.fromARGB(255, 82, 82, 197),
         onPressed: () => Navigator.pushNamed(context, '/add'),
         child: const Icon(Icons.add),
       ),
