@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -43,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
           password: password,
         );
       } else {
-        // 註冊
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password,
@@ -86,63 +86,131 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(isLogin ? '登入' : '註冊')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 48),
-            TextField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
+      backgroundColor: const Color(0xFFFDF6FF),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                const SizedBox(height: 48),
+                const Icon(Icons.favorite, color: Colors.purple, size: 48),
+                const SizedBox(height: 12),
+                const Text(
+                  'Mood Journal',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.purple,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  isLogin ? '歡迎回來！請登入帳號' : '註冊新帳號，一起開始記錄心情吧！',
+                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                const SizedBox(height: 32),
+
+                // Email
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16),
+
+                // 密碼
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: '密碼',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+
+                // 額外欄位 (註冊用)
+                if (!isLogin) ...[
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: ageController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: '年齡',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<String>(
+                    value: gender,
+                    items: ['男', '女', '其他'].map((g) {
+                      return DropdownMenuItem(value: g, child: Text(g));
+                    }).toList(),
+                    onChanged: (val) => setState(() => gender = val!),
+                    decoration: InputDecoration(
+                      labelText: '性別',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                ],
+
+                if (errorMessage != null) ...[
+                  const SizedBox(height: 16),
+                  Text(
+                    errorMessage!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ],
+
+                const SizedBox(height: 24),
+
+                // 登入/註冊按鈕
+                ElevatedButton.icon(
+                  onPressed: isLoading ? null : handleAuth,
+                  icon: const Icon(Icons.login),
+                  label: Text(isLogin ? '登入' : '註冊'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple[700],
+                    foregroundColor: Colors.white, // ⬅️ 白色文字
+                    minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+
+                // 切換註冊或登入
+                const SizedBox(height: 16),
+                GestureDetector(
+                  onTap: isLoading
+                      ? null
+                      : () => setState(() {
+                            isLogin = !isLogin;
+                            errorMessage = null;
+                          }),
+                  child: Text(
+                    isLogin ? '沒有帳號？註冊' : '已有帳號？登入',
+                    style: const TextStyle(
+                      color: Colors.purple,
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+              ],
             ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: '密碼', border: OutlineInputBorder()),
-            ),
-            if (!isLogin) ...[
-              const SizedBox(height: 16),
-              TextField(
-                controller: ageController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: '年齡', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: gender,
-                items: ['男', '女', '其他'].map((g) {
-                  return DropdownMenuItem(value: g, child: Text(g));
-                }).toList(),
-                onChanged: (val) => setState(() => gender = val!),
-                decoration: const InputDecoration(labelText: '性別', border: OutlineInputBorder()),
-              ),
-            ],
-            if (errorMessage != null) ...[
-              const SizedBox(height: 16),
-              Text(errorMessage!, style: const TextStyle(color: Colors.red)),
-            ],
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: isLoading ? null : handleAuth,
-              child: isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : Text(isLogin ? '登入' : '註冊'),
-              style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
-            ),
-            TextButton(
-              onPressed: isLoading
-                  ? null
-                  : () => setState(() {
-                        isLogin = !isLogin;
-                        errorMessage = null;
-                      }),
-              child: Text(isLogin ? '沒有帳號？註冊' : '已有帳號？登入'),
-            )
-          ],
+          ),
         ),
       ),
     );

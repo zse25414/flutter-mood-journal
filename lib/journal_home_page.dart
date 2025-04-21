@@ -59,7 +59,7 @@ class JournalHomePage extends StatelessWidget {
           )
         ],
       ),
-      backgroundColor: const Color.fromARGB(255, 92, 82, 82),
+      backgroundColor: const Color.fromARGB(255, 230, 227, 227),
       body: StreamBuilder<QuerySnapshot>(
         stream: journalRef.snapshots(),
         builder: (context, snapshot) {
