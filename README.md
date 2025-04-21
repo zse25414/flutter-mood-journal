@@ -9,8 +9,8 @@
 ## 🖼️ 預覽畫面
 
 | 主畫面 | 新增日記 | 心情選擇 | 心情統計 | AI 鼓勵語 |
-|---------|---------|---------|------------|
-| ![](screenshots/main.png) |![](screenshots/new.png) | ![](screenshots/mood.png) | ![](screenshots/chart.png) | ![](screenshots/ai.png) |
+|--------|----------|----------|------------|------------|
+| ![](screenshots/main.png) | ![](screenshots/new.png) | ![](screenshots/mood.png) | ![](screenshots/chart.png) | ![](screenshots/ai.png) |
 
 ---
 
